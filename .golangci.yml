@@ -1,0 +1,86 @@
+run:
+  timeout: 10m
+
+  build-tags:
+    - "skip"
+
+  skip-dirs:
+    - pkg/fhir
+    - pkg/aidbox
+    - vendor
+    - __scripts__
+
+  skip-files:
+    - ".*\\.gen\\.go$"
+
+linters:
+  enable:
+    - bodyclose
+    - misspell
+    # - revive
+    - asciicheck
+    - exhaustive
+    - godot
+    - gofumpt
+    - gosec
+    - stylecheck
+    - nakedret
+    - makezero
+    - nilerr
+    - unconvert
+    - forbidigo
+    - gocritic
+    
+linters-settings:
+  misspell:
+    locale: US
+    # ignore-words:
+      # - nefrosovet
+      # - oidc
+
+  forbidigo:
+    # Forbid the following identifiers (identifiers are written using regexp):
+    forbid:
+      - ^print.*$
+      - 'fmt\.Print.*'
+
+  gocritic:
+    # Which checks should be disabled; can't be combined with 'enabled-checks'; default is empty
+    disabled-checks:
+      - regexpMust
+      - hugeParam
+      # - rangeValCopy
+
+    # Enable multiple checks by tags, run `GL_DEBUG=gocritic golangci-lint run` to see all tags and checks.
+    # Empty list by default. See https://github.com/go-critic/go-critic#usage -> section "Tags".
+    enabled-tags:
+      - performance
+    disabled-tags:
+      - experimental
+
+    # Settings passed to gocritic.
+    # The settings key is the name of a supported gocritic checker.
+    # The list of supported checkers can be find in https://go-critic.github.io/overview.
+    settings:
+      captLocal: # must be valid enabled check name
+        # whether to restrict checker to params only (default true)
+        paramsOnly: true
+      elseif:
+        # whether to skip balanced if-else pairs (default true)
+        skipBalanced: true
+      # hugeParam:
+      #   # size in bytes that makes the warning trigger (default 80)
+      #   sizeThreshold: 80
+      rangeExprCopy:
+        # size in bytes that makes the warning trigger (default 512)
+        sizeThreshold: 512
+        # whether to check test functions (default true)
+        skipTestFuncs: true
+      rangeValCopy:
+        # size in bytes that makes the warning trigger (default 128)
+        sizeThreshold: 32
+        # whether to check test functions (default true)
+        skipTestFuncs: true
+      underef:
+        # whether to skip (*x).method() calls where x is a pointer receiver (default true)
+        skipRecvDeref: true

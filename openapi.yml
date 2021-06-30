@@ -1,37 +1,10 @@
-# Herr
+openapi: "3.0.3"
+info:
+  title: Server
+  version: "1.0"
+servers:
+  - url: https://api.server.test/v1
 
-### Errors
-
-`Herr` implements the error model of the well established
-[Google API Design Guide](https://cloud.google.com/apis/design/errors). Additionally, it makes the fields `request` and `reason` available. A complete `Herr` error response looks like this:
-
-```json
-{
-    "error": {
-        "code": 400,
-        "status": "Bad Request",
-        "request": "8512585f-587a-40bf-9ec7-2937f10d1d97",
-        "reason": "INVALID_PARAMETER",
-        "items": [
-            {
-                "name": "user",
-                "code": "EMPTY",
-                "description": "User is not defined"
-            }
-        ],
-        "details": [
-            {"additional": "info"}
-        ],
-        "message":"foo"
-    }
-}
-```
-
-### Open API Error description
-
-[Open API file](openapi.yml)
-
-```yaml
 components:
   schemas:
     ErrorItem:
@@ -89,4 +62,57 @@ components:
       required:
         - "status"
         - "code"
-```
+
+  responses:
+    400BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    402PaymentRequired:
+      description: Payment required
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    404NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    409Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    500InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+paths:
+  /healthcheck:
+    get:
+      tags:
+        - system
+      summary: Server is running.
+      responses:
+        "200":
+          description: OK
